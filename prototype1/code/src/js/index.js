@@ -33,7 +33,7 @@ window.addEventListener("DOMContentLoaded", function(){
   })
 }, false);
 
-var socket = io('http://localhost:7828');
+var socket = io('http://localhost:7828/');
 socket.on('connect', function(){});
 
 var isPressed = false;

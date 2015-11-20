@@ -8,9 +8,9 @@
   },
   "author": "",
   "window": {
-    "toolbar": false,
-    "width": 1000,
-    "height": 800
+    /*"toolbar": false,*/
+    "width": 1366,
+    "height": 720
   },
   "license": "ISC",
   "dependencies": {
