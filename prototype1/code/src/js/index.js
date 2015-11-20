@@ -31,12 +31,18 @@ window.addEventListener("DOMContentLoaded", function(){
   document.getElementById("snap").addEventListener("click", function() {
 	   context.drawImage(video, 0, 0, 560, 420);
   })
+
+  $("#send-image-data").click(function() {
+    var dataURL = canvas.toDataURL("image/jpg");
+    console.log(dataURL);
+    socket.emit('onImageData', dataURL);
+  });
+
 }, false);
 
 var socket = io('http://localhost:7828/');
 socket.on('connect', function(){});
 
-var isPressed = false;
 socket.on('message', function(data){
   console.log(data);
   //var clickPhoto = isPressed
@@ -44,4 +50,7 @@ socket.on('message', function(data){
     $("#snap").click();
   }
 });
+
+
+
 socket.on('disconnect', function(){});
