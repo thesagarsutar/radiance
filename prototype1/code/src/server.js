@@ -4,6 +4,28 @@ var path = require('path');
 var gm = require('gm');
 var mime = require('mime');
 var Caman = require('caman').Caman;
+// var tesseract = require('node-tesseract');
+var dv = require('dv');
+
+process.on('SIGINT', function() {
+    console.log('Naughty SIGINT-handler');
+});
+process.on('exit', function () {
+    console.log('exit');
+});
+console.log('PID: ', process.pid);
+
+// var express = require('express');
+//
+// var options = {
+//     key: fs.readFileSync('/usr/local/apache/conf/ssl.key'),
+//     cert: fs.readFileSync('/usr/local/apache/conf/ssl.crt'),
+//     requestCert: false,
+//     rejectUnauthorized: false
+// };
+//
+// // Create a service (the app object is just a callback).
+// var app = express();
 
 var http = require('http').createServer(function (request, response) {
   console.log('starting request....');
@@ -57,9 +79,14 @@ var http = require('http').createServer(function (request, response) {
         response.end(content, 'utf-8');
     }
   });
-}).listen(7828);
+}).listen(7828, function() {
+  console.log('server is running at http://localhost:7828');
+});
 
-console.log('server is running at http://localhost:7828');
+// var server = require('https').createServer(options, app).listen(7573, function(){
+//     console.log("ssl server started at https://localhost:7573");
+// });
+
 
 var io = require('socket.io')(http);
 
@@ -89,17 +116,43 @@ io.on( "connection", function ( socket ) {
           //       console.log('Created an image from a Buffer!');
           //     }
           //   });
+          // node-canamJs
           Caman("image.png", function () {
-            // this.brightness(40);
-            // this.contrast(10);
+            this.sepia(0);
+            this.exposure(60);
+            this.greyscale();
+            this.noise(0);
             this.brightness(10);
-            this.contrast(30);
-            this.sepia(60);
-            this.saturation(-30);
-            this.exposure(100);
-            //this.saturation(-100);
+            this.contrast(0);
+            this.gamma(5);
+            this.sharpen(1);
+             // this.curves('rgb', [0, 0], [100, 120], [180, 240], [255, 255]);
             this.render(function () {
+            	console.log('file saved');
               this.save("./out.png");
+              // this.canvas.toBuffer();
+              var imageBuffer = this.canvas.toBuffer().toString('base64');
+              //console.log( imageBuffer );
+              socket.emit( "onImageData1", "data:image/png;base64," + imageBuffer );
+
+              setTimeout(function() {
+                var image = new dv.Image('png', new Buffer(imageBuffer, 'base64')); // Ta-da);
+                var tesseract = new dv.Tesseract('eng', image);
+                var digitalizedData = tesseract.findText('plain');
+                console.log(digitalizedData);
+                socket.emit( "ocr", digitalizedData );
+              }, 2000);
+
+
+
+              // tesseract.process('./out.png', function(err, text) {
+              //     if(err) {
+              //         console.error(err);
+              //     } else {
+              //         console.log(text);
+              //     }
+              // });
+
             });
           });
         }
@@ -123,3 +176,15 @@ function decodeBase64Image(dataString) {
 
   return response;
 }
+
+
+
+process.on('SIGINT', function() {
+    console.log('Nice SIGINT-handler');
+    listeners = process.listeners('SIGINT');
+    for (var i = 0; i < listeners.length; i++) {
+        console.log(listeners[i].toString());
+    }
+
+    process.exit();
+});

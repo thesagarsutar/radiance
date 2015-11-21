@@ -10,6 +10,12 @@ window.addEventListener("DOMContentLoaded", function(){
 
   //get video listener
 
+  var sendImage = function() {
+    var dataURL = canvas.toDataURL("image/jpg");
+    //console.log(dataURL);
+    socket.emit('onImageData', dataURL);
+  }
+
   if (navigator.getUserMedia) {
     navigator.getUserMedia(videoObj, function(stream){
       video.src = stream;
@@ -29,13 +35,18 @@ window.addEventListener("DOMContentLoaded", function(){
 	}
 
   document.getElementById("snap").addEventListener("click", function() {
-	   context.drawImage(video, 0, 0, 560, 420);
+	   context.drawImage(video, 0, 0, 640, 480);
+     var image = new Image();
+     image.id = "captured-image";
+     image.src = canvas.toDataURL("image/png");
+     image.onload = sendImage();
+     document.getElementById('captured-image').remove();
+     document.getElementById('captured-image-wrapper').appendChild(image);
   })
 
+
   $("#send-image-data").click(function() {
-    var dataURL = canvas.toDataURL("image/jpg");
-    console.log(dataURL);
-    socket.emit('onImageData', dataURL);
+    sendImage();
   });
 
 }, false);
@@ -48,9 +59,25 @@ socket.on('message', function(data){
   //var clickPhoto = isPressed
   if(data.trim() == "1") { //if button is pressed
     $("#snap").click();
+    $("#processed-image-wrapper .loader-wrapper").show();
   }
 });
 
+socket.on('onImageData1', function(data){
+  $("#processed-image-wrapper .loader-wrapper").hide();
+  //console.log(data);
+  var image = new Image();
+  image.id="processed-image";
+  image.src = data;
+  document.getElementById('processed-image').remove();
+  document.getElementById('processed-image-wrapper').appendChild(image);
+  $("#ocr-wrapper .loader-wrapper").show();
+});
 
+socket.on('ocr', function(data) {
+  console.log("OCR data", data);
+  document.getElementById('ocr-data').value = data;
+  $("#ocr-wrapper .loader-wrapper").hide();
+});
 
 socket.on('disconnect', function(){});

@@ -21,5 +21,5 @@ void loop() {
     digitalWrite(ledPin, LOW);
     //Serial.println("unpressed");
   }
-  delay(3);
+  delay(200);
 }

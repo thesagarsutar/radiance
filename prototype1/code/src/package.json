@@ -1,18 +1,18 @@
-{
-  "name": "nw-app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.html",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "window": {
-    "width": 1366,
-    "height": 720
-  },
-  "license": "ISC",
-  "dependencies": {
-    "pretty-bytes": "^1.0.2"
-  }
-}
+// {
+//   "name": "nw-app",
+//   "version": "1.0.0",
+//   "description": "",
+//   "main": "index.html",
+//   "scripts": {
+//     "test": "echo \"Error: no test specified\" && exit 1"
+//   },
+//   "author": "",
+//   "window": {
+//     "width": 1366,
+//     "height": 720
+//   },
+//   "license": "ISC",
+//   "dependencies": {
+//     "pretty-bytes": "^1.0.2"
+//   }
+// }

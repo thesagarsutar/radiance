@@ -1,7 +1,6 @@
 
 var fs = require('fs');
 var path = require('path');
-var gm = require('gm');
 var mime = require('mime');
 var Caman = require('caman').Caman;
 
@@ -38,25 +37,25 @@ var http = require('http').createServer(function (request, response) {
         break;
   }
 
-  fs.readFile(filePath, function(error, content) {
-    if (error) {
-        if(error.code == 'ENOENT'){
-            fs.readFile('./404.html', function(error, content) {
-                response.writeHead(200, { 'Content-Type': contentType });
-                response.end(content, 'utf-8');
-            });
-        }
-        else {
-            response.writeHead(500);
-            response.end('Sorry, check with the site admin for error: '+error.code+' ..\n');
-            response.end();
-        }
-    }
-    else {
-        response.writeHead(200, { 'Content-Type': contentType });
-        response.end(content, 'utf-8');
-    }
-  });
+  // fs.readFile(filePath, function(error, content) {
+  //   if (error) {
+  //       if(error.code == 'ENOENT'){
+  //           fs.readFile('./404.html', function(error, content) {
+  //               response.writeHead(200, { 'Content-Type': contentType });
+  //               response.end(content, 'utf-8');
+  //           });
+  //       }
+  //       else {
+  //           response.writeHead(500);
+  //           response.end('Sorry, check with the site admin for error: '+error.code+' ..\n');
+  //           response.end();
+  //       }
+  //   }
+  //   else {
+  //       response.writeHead(200, { 'Content-Type': contentType });
+  //       response.end(content, 'utf-8');
+  //   }
+  // });
 }).listen(7828);
 
 console.log('server is running at http://localhost:7828');
@@ -65,13 +64,13 @@ console.log('server is running at http://localhost:7828');
 // node-canamJs
 Caman("image.png", function () {
   this.sepia(0);
-  this.exposure(57);
+  this.exposure(60);
   this.greyscale();
   this.noise(0);
   this.brightness(10);
   this.contrast(0);
-  this.gamma(2);
-  this.sharpen(100);
+  this.gamma(5);
+  this.sharpen(1);
    // this.curves('rgb', [0, 0], [100, 120], [180, 240], [255, 255]);
   this.render(function () {
   	console.log('file saved');

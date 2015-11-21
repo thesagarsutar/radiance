@@ -1,0 +1,96 @@
+/*link to google web font api*/
+@import url(http://fonts.googleapis.com/css?family=Open%20Sans);
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans';
+}
+
+header {
+    padding: 20px;
+    background-color: #E1E1E1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+header h3 {
+  margin: 0 10px;
+  padding: 0 10px;
+}
+
+.col-2 {
+  display: inline-block;
+  width: 45%;
+}
+
+img {
+  display: block;
+  width: 70%;
+  margin: auto;
+  border: 5px solid #000;
+}
+
+.loader-wrapper {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  margin-top: 140px;
+  margin-left: 257px;
+  padding: 20px;
+}
+
+.loader-wrapper img {
+  width: 72px;
+  height: 72px;
+  border: none;
+
+}
+
+#canvas {
+  display: none;
+}
+
+#ocr-data {
+  font-size: 24px;
+  font-family: 'courier';
+  width: 70%;
+  margin: auto;
+  display: block;
+  border: 5px solid;
+  height: 300px;
+}
+
+button {
+   outline : none;
+   cursor : pointer;
+   font-family : "Open Sans";
+   -webkit-transition-duration : 200ms;
+   -moz-transition-duration : 200ms;
+   transition-duration : 200ms;
+   border : 0px #007ba8 solid;
+   -webkit-border-radius : 6px;
+   -moz-border-radius : 6px;
+   border-radius : 6px;
+   color : #ffffff;
+   font-size : 18px;
+   font-style : normal;
+   padding : 6px 15px;
+   background-color : #00a2e8;
+}
+button:hover {
+   background-color : #008ac5;
+}
+button:active {
+   -webkit-box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
+   -moz-box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
+   box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
+}
+button:disabled {
+   opacity : 0.5;
+   cursor : no-drop;
+}
