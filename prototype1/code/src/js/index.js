@@ -80,4 +80,11 @@ socket.on('ocr', function(data) {
   $("#ocr-wrapper .loader-wrapper").hide();
 });
 
+socket.on('ocrJSON', function(data) {
+  console.log("OCR JSONdata", data);
+  var ocrObj = JSON.parse(data);
+  $("#time").text(ocrObj[0].time);
+  $("#task").text(ocrObj[0].task);
+});
+
 socket.on('disconnect', function(){});

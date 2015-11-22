@@ -8,8 +8,8 @@
 }
 
 header {
-    padding: 20px;
-    background-color: #E1E1E1;
+  padding: 20px;
+  background-color: #E1E1E1;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -65,32 +65,47 @@ img {
   height: 300px;
 }
 
+#schedule-wrapper {
+  text-align: center;
+}
+
+table {
+  width: 70%;
+  border: 1px solid;
+  margin: auto;
+}
+
+td, tr, th {
+  border: 1px solid;
+  padding: 5px;
+}
+
 button {
-   outline : none;
-   cursor : pointer;
-   font-family : "Open Sans";
-   -webkit-transition-duration : 200ms;
-   -moz-transition-duration : 200ms;
-   transition-duration : 200ms;
-   border : 0px #007ba8 solid;
-   -webkit-border-radius : 6px;
-   -moz-border-radius : 6px;
-   border-radius : 6px;
-   color : #ffffff;
-   font-size : 18px;
-   font-style : normal;
-   padding : 6px 15px;
-   background-color : #00a2e8;
+  outline : none;
+  cursor : pointer;
+  font-family : "Open Sans";
+  -webkit-transition-duration : 200ms;
+  -moz-transition-duration : 200ms;
+  transition-duration : 200ms;
+  border : 0px #007ba8 solid;
+  -webkit-border-radius : 6px;
+  -moz-border-radius : 6px;
+  border-radius : 6px;
+  color : #ffffff;
+  font-size : 18px;
+  font-style : normal;
+  padding : 6px 15px;
+  background-color : #00a2e8;
 }
 button:hover {
-   background-color : #008ac5;
+  background-color : #008ac5;
 }
 button:active {
-   -webkit-box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
-   -moz-box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
-   box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
+  -webkit-box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
+  -moz-box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
+  box-shadow : 0 0 1px 0 #acacac inset,  0 2px 6px 0 #00415d inset;
 }
 button:disabled {
-   opacity : 0.5;
-   cursor : no-drop;
+  opacity : 0.5;
+  cursor : no-drop;
 }
