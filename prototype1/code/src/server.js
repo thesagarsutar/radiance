@@ -154,7 +154,7 @@ io.on( "connection", function ( socket ) {
               socket.emit( "ocrJSON", JSON.stringify(jsonData) );
               var hours = Number(time.match(/^(\d+)/) ? time.match(/^(\d+)/)[1]: 0);
               var minutes = Number(time.match(/:(\d+)/) ? time.match(/:(\d+)/)[1] : 0);
-              var AMPM = time.match(/[A-Z]+/g) ? time.match(/[A-Z]+/g)[0] : AM;
+              var AMPM = time.match(/[A-Z]+/g) ? time.match(/[A-Z]+/g)[0] : 0;
               console.log(hours, minutes, AMPM);
               console.log("----------");
               if(AMPM == "PM" && hours<12) hours = hours+12;
