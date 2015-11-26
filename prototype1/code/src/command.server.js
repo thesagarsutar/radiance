@@ -25,5 +25,5 @@ child = exec("pwd", function (error, stdout, stderr) {
 
 function puts(error, stdout, stderr) { console.log(stdout) }
 
-exec("v4l2-ctl -d 1 -c focus_auto=0", puts);
-exec("v4l2-ctl -d 1 -c focus_absolute=1", puts);
+// exec("v4l2-ctl -d 1 -c focus_auto=0", puts);
+// exec("v4l2-ctl -d 1 -c focus_absolute=15", puts);

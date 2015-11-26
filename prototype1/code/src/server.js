@@ -7,6 +7,12 @@ var Caman = require('caman').Caman;
 // var tesseract = require('node-tesseract');
 var dv = require('dv');
 
+var util = require('util')
+
+var exec = require('child_process').exec;
+
+var child;
+
 var schedule = require('node-schedule');
 
 var today = new Date();
@@ -99,6 +105,11 @@ var io = require('socket.io')(http);
 
 io.on( "connection", function ( socket ) {
   // On a new Socket.io connection, load the data provider we want. For now, just Arduino.
+  function puts(error, stdout, stderr) { console.log(stdout) }
+
+  exec("v4l2-ctl -d 1 -c focus_auto=0", puts);
+  exec("v4l2-ctl -d 1 -c focus_absolute=20", puts);
+
   console.log("connection established with client ...");
   var $provider = require('./services/arduino.js').init(socket);
 
