@@ -176,9 +176,9 @@ io.on( "connection", function ( socket ) {
               if(minutes<10) sMinutes = "0" + sMinutes;
               // console.log(sHours + ":" + sMinutes);
               var scheduleDate = new Date(yyyy, mm, dd, sHours, sMinutes, 0);
-              require('./services/arduino.js').send(1);
+
               var j = schedule.scheduleJob(scheduleDate, function(){
-                console.log("Arduino called");
+                require('./services/arduino.js').send(1);
                 j.cancel();
               });
             }

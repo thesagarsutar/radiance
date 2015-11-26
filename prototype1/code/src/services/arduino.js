@@ -29,10 +29,6 @@ var openPort = function () {
         console.log('data received: ' + data);
         socket.emit( "message", data.toString() );
       });
-      sp.write("ls\n", function(err, results) {
-        console.log('err ' + err);
-        console.log('results ' + results);
-      });
     });
   }
 }
