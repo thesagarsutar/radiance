@@ -1,18 +1,45 @@
-// {
-//   "name": "nw-app",
-//   "version": "1.0.0",
-//   "description": "",
-//   "main": "index.html",
-//   "scripts": {
-//     "test": "echo \"Error: no test specified\" && exit 1"
-//   },
-//   "author": "",
-//   "window": {
-//     "width": 1366,
-//     "height": 720
-//   },
-//   "license": "ISC",
-//   "dependencies": {
-//     "pretty-bytes": "^1.0.2"
-//   }
-// }
+{
+  "name": "remindeme",
+  "version": "1.0.0",
+  "description": "Reminder system",
+  "main": "arduino.server.js",
+  "dependencies": {
+    "caman": "^4.1.2",
+    "canvas": "^1.3.2",
+    "dv": "^1.10.1",
+    "exotel": "^1.0.1",
+    "express": "^4.13.3",
+    "gm": "^1.21.1",
+    "imagecache": "^0.2.0",
+    "jimp": "^0.2.19",
+    "lwip": "^0.0.8",
+    "mime": "^1.3.4",
+    "node-schedule": "^0.5.1",
+    "nodehun": "^2.0.8",
+    "opencv": "^3.2.0",
+    "serialport": "^2.0.5",
+    "socket.io": "^1.3.7",
+    "spellchecker": "^3.1.3",
+    "teacher": "^0.0.1",
+    "tesseract_native": "^0.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesagarsutar/radiance.git"
+  },
+  "keywords": [
+    "project",
+    "radiance"
+  ],
+  "author": "Sagar Sutar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thesagarsutar/radiance/issues"
+  },
+  "homepage": "https://github.com/thesagarsutar/radiance#readme"
+}

@@ -14,6 +14,10 @@ var exec = require('child_process').exec;
 var child;
 
 var schedule = require('node-schedule');
+var exotel = require('exotel')({
+    id   : "nid561",
+    token: "9637ae1659ecccdecbe17046d193194262e8d249"
+});
 
 var today = new Date();
 var dd = today.getDate();
@@ -27,18 +31,6 @@ process.on('exit', function () {
   console.log('exit');
 });
 console.log('PID: ', process.pid);
-
-// var express = require('express');
-//
-// var options = {
-//     key: fs.readFileSync('/usr/local/apache/conf/ssl.key'),
-//     cert: fs.readFileSync('/usr/local/apache/conf/ssl.crt'),
-//     requestCert: false,
-//     rejectUnauthorized: false
-// };
-//
-// // Create a service (the app object is just a callback).
-// var app = express();
 
 var http = require('http').createServer(function (request, response) {
   console.log('starting request....');
@@ -176,11 +168,27 @@ io.on( "connection", function ( socket ) {
               if(minutes<10) sMinutes = "0" + sMinutes;
               // console.log(sHours + ":" + sMinutes);
               var scheduleDate = new Date(yyyy, mm, dd, sHours, sMinutes, 0);
+              var currentDate = new Date();
+              console.log("scheduleDate: ", scheduleDate);
+              console.log("currentDate: ", currentDate);
+              if(AMPM != 0 && scheduleDate > currentDate) {
+                var j = schedule.scheduleJob(scheduleDate, function(){
+                  require('./services/arduino.js').send(1);
+                  var msg = "Hey your task '" + task + "' is pending at " + time.toUpperCase();
+                  exotel.sendSMS('7048398782', msg, function (err, res) {
+                      if (err) {
+                        console.error(err);
+                      } else {
+                        console.log(res);
+                      }
 
-              var j = schedule.scheduleJob(scheduleDate, function(){
-                require('./services/arduino.js').send(1);
-                j.cancel();
-              });
+                  });
+                  j.cancel();
+                });
+              } else {
+                console.log("Invalid Date");
+              }
+
             }
           }, 2000);
         });
