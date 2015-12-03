@@ -86,6 +86,9 @@ var http = require('http').createServer(function (request, response) {
   });
 }).listen(7828, function() {
   console.log('server is running at http://localhost:7828');
+  function puts(error, stdout, stderr) { console.log(stdout) }
+  exec("v4l2-ctl -d 1 -c focus_auto=0", puts);
+  exec("v4l2-ctl -d 1 -c focus_absolute=20", puts);
 });
 
 // var server = require('https').createServer(options, app).listen(7573, function(){
@@ -97,10 +100,6 @@ var io = require('socket.io')(http);
 
 io.on( "connection", function ( socket ) {
   // On a new Socket.io connection, load the data provider we want. For now, just Arduino.
-  function puts(error, stdout, stderr) { console.log(stdout) }
-
-  exec("v4l2-ctl -d 1 -c focus_auto=0", puts);
-  exec("v4l2-ctl -d 1 -c focus_absolute=20", puts);
 
   console.log("connection established with client ...");
   var $provider = require('./services/arduino.js').init(socket);
