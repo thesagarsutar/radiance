@@ -1,4 +1,3 @@
-
 var fs = require('fs');
 var path = require('path');
 var gm = require('gm');
@@ -15,8 +14,8 @@ var child;
 
 var schedule = require('node-schedule');
 var exotel = require('exotel')({
-    id   : "nid561",
-    token: "9637ae1659ecccdecbe17046d193194262e8d249"
+  id: "nid561",
+  token: "9637ae1659ecccdecbe17046d193194262e8d249"
 });
 
 var today = new Date();
@@ -27,66 +26,71 @@ var yyyy = today.getFullYear();
 process.on('SIGINT', function() {
   console.log('Naughty SIGINT-handler');
 });
-process.on('exit', function () {
+process.on('exit', function() {
   console.log('exit');
 });
 console.log('PID: ', process.pid);
 
-var http = require('http').createServer(function (request, response) {
+var http = require('http').createServer(function(request, response) {
   console.log('starting request....');
 
   //set default file location
   var filePath = '.' + request.url;
-  if(filePath == './') {
+  if (filePath == './') {
     filePath = './index.html';
   }
 
   var fileExt = path.extname(filePath),
-  contentType = 'text/html';
+    contentType = 'text/html';
 
   switch (fileExt) {
     case '.js':
-    contentType = 'text/javascript';
-    break;
+      contentType = 'text/javascript';
+      break;
     case '.css':
-    contentType = 'text/css';
-    break;
+      contentType = 'text/css';
+      break;
     case '.json':
-    contentType = 'application/json';
-    break;
+      contentType = 'application/json';
+      break;
     case '.png':
-    contentType = 'image/png';
-    break;
+      contentType = 'image/png';
+      break;
     case '.jpg':
-    contentType = 'image/jpg';
-    break;
+      contentType = 'image/jpg';
+      break;
     case '.wav':
-    contentType = 'audio/wav';
-    break;
+      contentType = 'audio/wav';
+      break;
   }
 
   fs.readFile(filePath, function(error, content) {
     if (error) {
-      if(error.code == 'ENOENT'){
+      if (error.code == 'ENOENT') {
         fs.readFile('./404.html', function(error, content) {
-          response.writeHead(200, { 'Content-Type': contentType });
+          response.writeHead(200, {
+            'Content-Type': contentType
+          });
           response.end(content, 'utf-8');
         });
-      }
-      else {
+      } else {
         response.writeHead(500);
-        response.end('Sorry, check with the site admin for error: '+error.code+' ..\n');
+        response.end('Sorry, check with the site admin for error: ' + error.code + ' ..\n');
         response.end();
       }
-    }
-    else {
-      response.writeHead(200, { 'Content-Type': contentType });
+    } else {
+      response.writeHead(200, {
+        'Content-Type': contentType
+      });
       response.end(content, 'utf-8');
     }
   });
 }).listen(7828, function() {
   console.log('server is running at http://localhost:7828');
-  function puts(error, stdout, stderr) { console.log(stdout) }
+
+  function puts(error, stdout, stderr) {
+    console.log(stdout)
+  }
   exec("v4l2-ctl -d 1 -c focus_auto=0", puts);
   exec("v4l2-ctl -d 1 -c focus_absolute=20", puts);
 });
@@ -98,7 +102,7 @@ var http = require('http').createServer(function (request, response) {
 
 var io = require('socket.io')(http);
 
-io.on( "connection", function ( socket ) {
+io.on("connection", function(socket) {
   // On a new Socket.io connection, load the data provider we want. For now, just Arduino.
 
   console.log("connection established with client ...");
@@ -109,12 +113,12 @@ io.on( "connection", function ( socket ) {
     var imageBuffer = decodedImg.data;
     var type = decodedImg.type;
     var extension = mime.extension(type);
-    var fileName =  "image." + extension;
+    var fileName = "image." + extension;
     try {
       fs.writeFileSync(fileName, imageBuffer, 'utf8');
       console.log("--- image created successfully ---");
 
-      Caman("image.png", function () {
+      Caman("image.png", function() {
         this.sepia(0);
         this.exposure(60);
         this.greyscale();
@@ -124,62 +128,60 @@ io.on( "connection", function ( socket ) {
         this.gamma(5);
         this.sharpen(1);
         // this.curves('rgb', [0, 0], [100, 120], [180, 240], [255, 255]);
-        this.render(function () {
+        this.render(function() {
           console.log('file saved');
           this.save("./out.png");
           // this.canvas.toBuffer();
           var imageBuffer = this.canvas.toBuffer().toString('base64');
           //console.log( imageBuffer );
-          socket.emit( "onImageData1", "data:image/png;base64," + imageBuffer );
+          socket.emit("onImageData1", "data:image/png;base64," + imageBuffer);
 
           setTimeout(function() {
             var image = new dv.Image('png', new Buffer(imageBuffer, 'base64')); // Ta-da);
             var tesseract = new dv.Tesseract('eng', image);
             var digitalizedData = tesseract.findText('plain');
             console.log(digitalizedData);
-            socket.emit( "ocr", digitalizedData );
+            socket.emit("ocr", digitalizedData);
             var lines = digitalizedData.split("\n");
-            if(lines.length > 2) {
-              var time = lines[0].replace(/[-#+~*_:]/g, '.').replace(/[^0-9.aApPmM]/g,'').replace(/(^\s*,)|(,\s*$)/g, "");
-                  time = time.replace(/[.]/, ":");
-              var task = lines[1].replace(/\+/g,'t');
+            if (lines.length > 2) {
+              var time = lines[0].replace(/[-#+~*_:]/g, '.').replace(/[^0-9.aApPmM]/g, '').replace(/(^\s*,)|(,\s*$)/g, "");
+              time = time.replace(/[.]/, ":");
+              var task = lines[1].replace(/\+/g, 't');
               console.log("------------------");
               console.log("time: ", time);
               console.log("message: ", task);
               console.log("------------------");
-              var jsonData = [
-                {
-                  "time": time.toUpperCase(),
-                  "task": task
-                }
-              ]
-              socket.emit( "ocrJSON", JSON.stringify(jsonData) );
-              var hours = Number(time.match(/^(\d+)/) ? time.match(/^(\d+)/)[1]: 0);
+              var jsonData = [{
+                "time": time.toUpperCase(),
+                "task": task
+              }]
+              socket.emit("ocrJSON", JSON.stringify(jsonData));
+              var hours = Number(time.match(/^(\d+)/) ? time.match(/^(\d+)/)[1] : 0);
               var minutes = Number(time.match(/:(\d+)/) ? time.match(/:(\d+)/)[1] : 0);
               var AMPM = time.match(/[A-Z]+/g) ? time.match(/[A-Z]+/g)[0] : 0;
               console.log(hours, minutes, AMPM);
               console.log("----------");
-              if(AMPM == "PM" && hours<12) hours = hours+12;
-              if(AMPM == "AM" && hours==12) hours = hours-12;
+              if (AMPM == "PM" && hours < 12) hours = hours + 12;
+              if (AMPM == "AM" && hours == 12) hours = hours - 12;
               var sHours = hours.toString();
               var sMinutes = minutes.toString();
-              if(hours<10) sHours = "0" + sHours;
-              if(minutes<10) sMinutes = "0" + sMinutes;
+              if (hours < 10) sHours = "0" + sHours;
+              if (minutes < 10) sMinutes = "0" + sMinutes;
               // console.log(sHours + ":" + sMinutes);
               var scheduleDate = new Date(yyyy, mm, dd, sHours, sMinutes, 0);
               var currentDate = new Date();
               console.log("scheduleDate: ", scheduleDate);
               console.log("currentDate: ", currentDate);
-              if(AMPM != 0 && scheduleDate > currentDate) {
-                var j = schedule.scheduleJob(scheduleDate, function(){
+              if (AMPM != 0 && scheduleDate > currentDate) {
+                var j = schedule.scheduleJob(scheduleDate, function() {
                   require('./services/arduino.js').send(1);
                   var msg = "Hey your task '" + task + "' is pending at " + time.toUpperCase();
-                  exotel.sendSMS('7048398782', msg, function (err, res) {
-                      if (err) {
-                        console.error(err);
-                      } else {
-                        console.log(res);
-                      }
+                  exotel.sendSMS('7048398782', msg, function(err, res) {
+                    if (err) {
+                      console.error(err);
+                    } else {
+                      console.log(res);
+                    }
 
                   });
                   j.cancel();
@@ -192,17 +194,16 @@ io.on( "connection", function ( socket ) {
           }, 2000);
         });
       });
-    }
-    catch(err) {
+    } catch (err) {
       console.error(err)
     }
   });
-} );
+});
 
 
 function decodeBase64Image(dataString) {
   var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-  response = {};
+    response = {};
 
   if (matches.length !== 3) {
     return new Error('Invalid input string');
